@@ -9,7 +9,7 @@ from typing import List, Tuple, Union
 import bs4
 import requests
 from pylast import User, TopItem, Album, Artist, Track
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 import lastfmcollagegenerator
 from lastfmcollagegenerator.constants import ENTITY_ARTIST, ENTITY_ALBUM, \
@@ -246,7 +246,7 @@ class ArtistCollageBuilder(BaseCollageBuilder):
             response = requests.get(url).content
             img = Image.open(BytesIO(response))
             img.seek(0)
-            img.thumbnail((cls.TILE_WIDTH, cls.TILE_HEIGHT), Image.ANTIALIAS)
+            img = ImageOps.fit(img, (cls.TILE_WIDTH, cls.TILE_HEIGHT), Image.ANTIALIAS)
             img_bytes = BytesIO()
             img.save(img_bytes, format="png")
             img = img_bytes.getvalue()
